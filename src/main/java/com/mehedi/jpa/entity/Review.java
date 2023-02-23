@@ -14,6 +14,17 @@ public class Review {
 
     private String description;
 
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
+    }
+
+    @ManyToOne
+    Course course;
+
     protected Review() {
     }
 

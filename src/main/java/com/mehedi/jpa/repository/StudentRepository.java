@@ -32,4 +32,5 @@ public class StudentRepository {
         Student student = findById(id);
         em.remove(student);
     }
+
 }
