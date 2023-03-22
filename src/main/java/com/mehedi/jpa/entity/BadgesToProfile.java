@@ -1,4 +1,5 @@
 package com.mehedi.jpa.entity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -25,7 +26,7 @@ public class BadgesToProfile {
     @Column(name = "id", updatable = false, nullable = false)
     private String id;
 
-    @JsonIgnoreProperties("badges")
+    @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "profile_id", nullable = false, referencedColumnName = "id")
     private Profile profile;

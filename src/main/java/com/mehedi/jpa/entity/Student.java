@@ -16,6 +16,10 @@ public class Student {
     @OneToOne(fetch = FetchType.LAZY)
     private Passport passport;
 
+    @ManyToMany
+    @JoinTable(name = "student_course", joinColumns = @JoinColumn(name = "student_id"), inverseJoinColumns = @JoinColumn(name = "course_id"))
+    private List<Course> courses = new ArrayList<>();
+
     public List<Course> getCourses() {
         return courses;
     }
@@ -24,9 +28,7 @@ public class Student {
         this.courses.add(course);
     }
 
-    @ManyToMany
-    @JoinTable(name = "student_course", joinColumns = @JoinColumn(name = "student_id"), inverseJoinColumns = @JoinColumn(name = "course_id"))
-    private List<Course> courses = new ArrayList<>();
+
     public Passport getPassport() {
         return passport;
     }

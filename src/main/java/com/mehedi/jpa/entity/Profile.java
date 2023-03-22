@@ -1,17 +1,12 @@
 package com.mehedi.jpa.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.FilterDef;
@@ -37,15 +32,11 @@ import org.springframework.data.annotation.LastModifiedDate;
 )
 public class Profile {
     @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
+    @GeneratedValue()
     @Column(name = "id", updatable = false, nullable = false)
-    private String id;
+    private Long id;
     @Column(name = "name")
     private String name;
-
-    @Column(name = "isPublish")
-    private boolean ispublish;
 
     @CreatedDate
     @Column(name = "created_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
@@ -55,19 +46,21 @@ public class Profile {
     @Column(name = "updated_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Instant updatedAt;
 
+    @ManyToMany(mappedBy = "usedBy")
+    private Set<Car> cars = new HashSet<>();
+
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "profile", targetEntity = BadgesToProfile.class)
-    @JsonIgnoreProperties("profile")
     private Set<BadgesToProfile> badges;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "profile")
     private Set<TagsToProfile> tags;
 
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -77,14 +70,6 @@ public class Profile {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public boolean isIspublish() {
-        return ispublish;
-    }
-
-    public void setIspublish(boolean ispublish) {
-        this.ispublish = ispublish;
     }
 
     public Instant getCreatedAt() {
@@ -117,5 +102,21 @@ public class Profile {
 
     public void setTags(Set<TagsToProfile> tags) {
         this.tags = tags;
+    }
+
+    public Set<Car> getCars() {
+        return cars;
+    }
+
+    public void assignedCar(Car car) {
+        cars.add(car);
+    }
+
+    public void assignTags(TagsToProfile tagsToProfile) {
+        tags.add(tagsToProfile);
+    }
+
+    public void assignBadge(BadgesToProfile badgesToProfile) {
+        badges.add(badgesToProfile);
     }
 }

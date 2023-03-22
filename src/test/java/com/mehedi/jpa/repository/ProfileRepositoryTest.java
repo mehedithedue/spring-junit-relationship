@@ -7,7 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.transaction.Transactional;
-import java.util.UUID;
+import java.util.Optional;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 
@@ -23,7 +24,6 @@ public class ProfileRepositoryTest {
     public void saveTest() {
         Profile profile = new Profile();
         profile.setName("Demo Profile");
-        profile.setId(String.valueOf(UUID.randomUUID()));
 //
 //        BadgesToProfile badgesToProfile = new BadgesToProfile();
 //        badgesToProfile.setId(String.valueOf(UUID.randomUUID()));
@@ -38,5 +38,17 @@ public class ProfileRepositoryTest {
         profileRepository.save(profile);
 //        badgesToProfileRepository.save(badgesToProfile);
 
+    }
+
+
+    @Test
+    public void findByID_present(){
+        Optional<Profile> profile = profileRepository.findById(1L);
+        assertTrue(profile.isPresent());
+    }
+    @Test
+    public void findByID_not_present(){
+        Optional<Profile> profile = profileRepository.findById(5L);
+        assertFalse(profile.isPresent());
     }
 }
